@@ -63,6 +63,22 @@ export default class App extends React.Component {
             ideias: ideias
         })
     }
+    removerIdeia(index){
+        let ideias = this.state.ideias
+        let temp = []
+
+        for(let x = 0; x < ideias.length; x++){
+            if(x != index){
+                temp.push(ideias[x])
+            }
+        }
+        this.setState({
+            ...this,
+            ideias: temp
+        })
+        window.localStorage.setItem("app_ideas_board",JSON.stringify(temp))
+        this.carregaIdeiasDoLocalStorage()
+    }
 
     alternaEstadoModalAdicionarTarefa(){
         this.setState({
@@ -91,7 +107,10 @@ export default class App extends React.Component {
 
 
             <Row>
-                <CardIdeia ideias={this.state.ideias} />
+                <CardIdeia
+                    ideias={this.state.ideias}
+                    remover={this.removerIdeia.bind(this)}
+                />
             </Row>
 
                 
@@ -213,6 +232,7 @@ export default class App extends React.Component {
                             })
                         } }
                     />
+                    
                 </ModalBody>
                 <ModalFooter>
                     <Button
