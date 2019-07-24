@@ -3,54 +3,43 @@ import { ButtonGroup, Button, Container, Row, Col, Modal, ModalHeader,ModalBody,
 
 import CardIdeia from './Ideas/Card'
 
+const INITIAL_STATE = {
+    ideias: [],
+    estadoModalAdicionarIdeia : false,
+    tituloDaIdeia: '',
+    descricaoDaIdeia: '',
+    cor: 'primary',
+    estadoModalEditarIdeia: false,
+    i: 0
+}
+
+const btnList = [ "primary", "secondary", "success", "info", "warning", "danger", "light", "dark" ]
+
+const LOCAL_STORAGE_APP_KEY = 'laksjdkasdjanosidhasuidayhsdnuasdhyauds'
+
 export default class App extends React.Component {
 
     constructor(props){
         super(props)
-
-        this.state = {
-            ideias: [],
-            estadoModalAdicionarIdeia : false,
-            tituloDaIdeia: '',
-            descricaoDaIdeia: '',
-            corDocartao: 'primary',
-            estadoModalEditarIdeia: false,
-            i: 0
-        }
+        this.state = INITIAL_STATE
 
         this.salvarIdeiaEditada = this.salvarIdeiaEditada.bind(this)
     }
 
     componentDidMount(){
-        let ideias = this.carregaIdeiasDoLocalStorage()
-        
-    }
-
-    salvaIdeia(){
-
-        let ideias = this.carregaIdeiasDoLocalStorage()
-
-        console.log(ideias)
-
-        this.salvarIdeiasNoLocalStorage()
-        
-
+        this.carregaIdeiasDoLocalStorage()
     }
 
     salvarIdeiasNoLocalStorage(){
         let ideias = this.state.ideias
         let titulo = this.state.tituloDaIdeia
         let descricao = this.state.descricaoDaIdeia
-        let cor = this.state.corDocartao
+        let cor = this.state.cor
 
-        ideias.push({
-            "titulo": titulo,
-            "descricao": descricao,
-            "cor": cor
-        })
+        ideias.push( { titulo, descricao, cor } )
 
-        window.localStorage.setItem("app_ideas_board",JSON.stringify(ideias))
-        this.carregaIdeiasDoLocalStorage()
+        this.salvaListaNoStorageEAtualiza(ideias)
+
         this.alternaEstadoModalAdicionarTarefa()
         this.setState({
             ...this,
@@ -60,7 +49,7 @@ export default class App extends React.Component {
     }
 
     carregaIdeiasDoLocalStorage(){
-        let ideias = window.localStorage.getItem('app_ideas_board')
+        let ideias = window.localStorage.getItem(LOCAL_STORAGE_APP_KEY)
 
         if(!ideias){
             ideias = []
@@ -85,15 +74,20 @@ export default class App extends React.Component {
             ...this,
             ideias: temp
         })
-        window.localStorage.setItem("app_ideas_board",JSON.stringify(temp))
-        this.carregaIdeiasDoLocalStorage()
+
+        this.salvaListaNoStorageEAtualiza(temp)
+        
     }
 
     alternaEstadoModalAdicionarTarefa(){
-
         this.setState({
             estadoModalAdicionarIdeia: !this.state.estadoModalAdicionarIdeia
         })
+    }
+
+    salvaListaNoStorageEAtualiza(lista){
+        window.localStorage.setItem(LOCAL_STORAGE_APP_KEY,JSON.stringify(lista))
+        this.carregaIdeiasDoLocalStorage()
     }
 
     abrirModalEditarIdeia(index){
@@ -102,7 +96,7 @@ export default class App extends React.Component {
             ...this,
             tituloDaIdeia: ideia.titulo,
             descricaoDaIdeia: ideia.descricao,
-            corDocartao: ideia.cor,
+            cor: ideia.cor,
             estadoModalEditarIdeia: true,
             i: index
         })
@@ -114,17 +108,16 @@ export default class App extends React.Component {
         let ideia = ideias[i]
         ideia.titulo = this.state.tituloDaIdeia
         ideia.descricao = this.state.descricaoDaIdeia
-        ideia.cor = this.state.corDocartao
+        ideia.cor = this.state.cor
         ideias[i] = ideia
 
-        window.localStorage.setItem("app_ideas_board",JSON.stringify(ideias))
-        this.carregaIdeiasDoLocalStorage()
+        this.salvaListaNoStorageEAtualiza(ideias)
 
         this.setState({
             ...this,
             tituloDaIdeia: '',
             descricaoDaIdeia: '',
-            corDocartao: '',
+            cor: '',
             estadoModalEditarIdeia: false,
             i: 0
         })
@@ -159,8 +152,6 @@ export default class App extends React.Component {
                 />
             </Row>
 
-                
-
             <Modal isOpen={this.state.estadoModalAdicionarIdeia}>
                 <ModalBody>
                     <h3 className="text-center">
@@ -174,86 +165,18 @@ export default class App extends React.Component {
 
                     <ButtonGroup className="mb-3">
                        
-                        <Button
-                            color="primary"
-                            className="p-3"
-                            onClick={()=>{
-                                this.setState({
-                                    ...this,
-                                    corDocartao: 'primary'
-                                })
-                            }}
-                            ></Button>
-                        <Button
-                            color="secondary"
-                            className="p-3"
-                            onClick={()=>{
-                                this.setState({
-                                    ...this,
-                                    corDocartao: 'secondary'
-                                })
-                            }}
-                            ></Button>
-                        <Button
-                            color="success"
-                            className="p-3"
-                            onClick={()=>{
-                                this.setState({
-                                    ...this,
-                                    corDocartao: 'success'
-                                })
-                            }}
-                            ></Button>
-                        <Button
-                            color="info"
-                            className="p-3"
-                            onClick={()=>{
-                                this.setState({
-                                    ...this,
-                                    corDocartao: 'info'
-                                })
-                            }}
-                            ></Button>
-                        <Button
-                            color="warning"
-                            className="p-3"
-                            onClick={()=>{
-                                this.setState({
-                                    ...this,
-                                    corDocartao: 'warning'
-                                })
-                            }}
-                            ></Button>
-                        <Button
-                            color="danger"
-                            className="p-3"
-                            onClick={()=>{
-                                this.setState({
-                                    ...this,
-                                    corDocartao: 'danger'
-                                })
-                            }}
-                            ></Button>
-                        <Button
-                            color="light"
-                            className="p-3"
-                            onClick={()=>{
-                                this.setState({
-                                    ...this,
-                                    corDocartao: 'light'
-                                })
-                            }}
-                            ></Button>
-                        <Button
-                            color="dark"
-                            className="p-3"
-                            onClick={()=>{
-                                this.setState({
-                                    ...this,
-                                    corDocartao: 'dark'
-                                })
-                            }}
-                            ></Button>
+                    {
+                        btnList.map( (btn, index) => <Button key={index}
+                        color={btn}
+                        className="p-3"
+                        onClick={()=>{
+                            this.setState({
+                                ...this,
+                                cor: btn
+                            })
+                        }}
+                        ></Button>)
+                    }
                     
                     </ButtonGroup>
 
@@ -282,7 +205,7 @@ export default class App extends React.Component {
                 </ModalBody>
                 <ModalFooter>
                     <Button
-                        onClick={this.salvaIdeia.bind(this)}
+                        onClick={this.salvarIdeiasNoLocalStorage.bind(this)}
                         disabled={
                             this.state.tituloDaIdeia.length < 4
                             ||
@@ -306,37 +229,53 @@ export default class App extends React.Component {
             <Modal isOpen={this.state.estadoModalEditarIdeia}>
                 <ModalHeader>
                 <Input
-                        placeholder="Descrição"
-                        value={this.state.tituloDaIdeia}
-                        onChange={ evt =>{
-                            this.setState({
-                                ...this,
-                                tituloDaIdeia: evt.target.value
-                            })
-                        } }
-                    />
+                    placeholder="Descrição"
+                    value={this.state.tituloDaIdeia}
+                    onChange={ evt =>{
+                        this.setState({
+                            ...this,
+                            tituloDaIdeia: evt.target.value
+                        })
+                    } }
+                />
                 </ModalHeader>
                 <ModalBody>
-                <Input
-                        placeholder="Descrição"
-                        value={this.state.descricaoDaIdeia}
-                        onChange={ evt =>{
+                <ButtonGroup className="mb-3">
+                    
+                    {
+                        btnList.map( (btn, index) => <Button key={ index }
+                        color={ btn }
+                        className="p-3"
+                        onClick={()=>{
                             this.setState({
                                 ...this,
-                                descricaoDaIdeia: evt.target.value
+                                cor: btn
                             })
-                        } }
+                        }}
+                        ></Button>)
+                    }
+                    
+                </ButtonGroup>
+                <Input
+                    placeholder="Descrição"
+                    value={this.state.descricaoDaIdeia}
+                    onChange={ evt =>{
+                        this.setState({
+                            ...this,
+                            descricaoDaIdeia: evt.target.value
+                        })
+                    } }
                     />
                 </ModalBody>
                 <ModalFooter>
                 <Button
-                        onClick={this.salvarIdeiaEditada }
-                        disabled={
-                            this.state.tituloDaIdeia.length < 4
-                            ||
-                            this.state.descricaoDaIdeia.length < 5
-                         }
-                        color="success">
+                    onClick={this.salvarIdeiaEditada }
+                    disabled={
+                        this.state.tituloDaIdeia.length < 4
+                        ||
+                        this.state.descricaoDaIdeia.length < 5
+                        }
+                    color="success">
                         Salvar
                     </Button>
                     <Button
@@ -344,7 +283,7 @@ export default class App extends React.Component {
                             this.setState({
                                 tituloDaIdeia: '',
                                 descricaoDaIdeia: '',
-                                corDocartao: '',
+                                cor: '',
                                 estadoModalEditarIdeia: false,
                                 i: 0
                             })
