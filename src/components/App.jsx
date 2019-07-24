@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Container, Row, Col, Modal,ModalBody, ModalFooter, Input } from 'reactstrap'
+import { ButtonGroup, Button, Container, Row, Col, Modal,ModalBody, ModalFooter, Input } from 'reactstrap'
 
 import CardIdeia from './Ideas/Card'
 
@@ -12,7 +12,8 @@ export default class App extends React.Component {
             ideias: [],
             estadoModalAdicionarIdeia : false,
             tituloDaIdeia: '',
-            descricaoDaIdeia: ''
+            descricaoDaIdeia: '',
+            corDocartao: 'primary'
         }
     }
 
@@ -36,10 +37,12 @@ export default class App extends React.Component {
         let ideias = this.state.ideias
         let titulo = this.state.tituloDaIdeia
         let descricao = this.state.descricaoDaIdeia
+        let cor = this.state.corDocartao
 
         ideias.push({
             "titulo": titulo,
             "descricao": descricao,
+            "cor": cor
         })
 
         window.localStorage.setItem("app_ideas_board",JSON.stringify(ideias))
@@ -99,6 +102,96 @@ export default class App extends React.Component {
                         Qual seria esta nova ideia?
                     </h3>
                     <hr/>
+
+                    <p className="py-2">
+                        Defina uma cor
+                    </p>
+
+                    <ButtonGroup className="mb-3">
+                       
+                        <Button
+                            color="primary"
+                            className="p-3"
+                            onClick={()=>{
+                                this.setState({
+                                    ...this,
+                                    corDocartao: 'primary'
+                                })
+                            }}
+                            ></Button>
+                        <Button
+                            color="secondary"
+                            className="p-3"
+                            onClick={()=>{
+                                this.setState({
+                                    ...this,
+                                    corDocartao: 'secondary'
+                                })
+                            }}
+                            ></Button>
+                        <Button
+                            color="success"
+                            className="p-3"
+                            onClick={()=>{
+                                this.setState({
+                                    ...this,
+                                    corDocartao: 'success'
+                                })
+                            }}
+                            ></Button>
+                        <Button
+                            color="info"
+                            className="p-3"
+                            onClick={()=>{
+                                this.setState({
+                                    ...this,
+                                    corDocartao: 'info'
+                                })
+                            }}
+                            ></Button>
+                        <Button
+                            color="warning"
+                            className="p-3"
+                            onClick={()=>{
+                                this.setState({
+                                    ...this,
+                                    corDocartao: 'warning'
+                                })
+                            }}
+                            ></Button>
+                        <Button
+                            color="danger"
+                            className="p-3"
+                            onClick={()=>{
+                                this.setState({
+                                    ...this,
+                                    corDocartao: 'danger'
+                                })
+                            }}
+                            ></Button>
+                        <Button
+                            color="light"
+                            className="p-3"
+                            onClick={()=>{
+                                this.setState({
+                                    ...this,
+                                    corDocartao: 'light'
+                                })
+                            }}
+                            ></Button>
+                        <Button
+                            color="dark"
+                            className="p-3"
+                            onClick={()=>{
+                                this.setState({
+                                    ...this,
+                                    corDocartao: 'dark'
+                                })
+                            }}
+                            ></Button>
+                    
+                    </ButtonGroup>
+
                     <Input
                         placeholder="Título"
                         value={this.state.tituloDaIdeia}
