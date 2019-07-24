@@ -8,7 +8,7 @@ export default props => {
         xs={12}
         md={4}
         lg={4}>
-            
+
             <Card
                 color={ideia.cor}
                 className={ ideia.cor == "light" ? "text-dark" : "text-white" }>
@@ -22,7 +22,11 @@ export default props => {
                     </p>
                 </CardBody>
                 <CardFooter>
-                    <Button size="sm">
+                    <Button
+                        onClick={()=>{
+                            props.editar(index)
+                        }}
+                        size="sm">
                         Editar
                     </Button>
                     <Button

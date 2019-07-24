@@ -1,5 +1,5 @@
 import React from 'react'
-import { ButtonGroup, Button, Container, Row, Col, Modal,ModalBody, ModalFooter, Input } from 'reactstrap'
+import { ButtonGroup, Button, Container, Row, Col, Modal, ModalHeader,ModalBody, ModalFooter, Input } from 'reactstrap'
 
 import CardIdeia from './Ideas/Card'
 
@@ -13,8 +13,12 @@ export default class App extends React.Component {
             estadoModalAdicionarIdeia : false,
             tituloDaIdeia: '',
             descricaoDaIdeia: '',
-            corDocartao: 'primary'
+            corDocartao: 'primary',
+            estadoModalEditarIdeia: false,
+            i: 0
         }
+
+        this.salvarIdeiaEditada = this.salvarIdeiaEditada.bind(this)
     }
 
     componentDidMount(){
@@ -48,6 +52,11 @@ export default class App extends React.Component {
         window.localStorage.setItem("app_ideas_board",JSON.stringify(ideias))
         this.carregaIdeiasDoLocalStorage()
         this.alternaEstadoModalAdicionarTarefa()
+        this.setState({
+            ...this,
+            tituloDaIdeia: '',
+            descricaoDaIdeia: ''
+        })
     }
 
     carregaIdeiasDoLocalStorage(){
@@ -81,9 +90,45 @@ export default class App extends React.Component {
     }
 
     alternaEstadoModalAdicionarTarefa(){
+
         this.setState({
             estadoModalAdicionarIdeia: !this.state.estadoModalAdicionarIdeia
         })
+    }
+
+    abrirModalEditarIdeia(index){
+        let ideia = this.state.ideias[index]
+        this.setState({
+            ...this,
+            tituloDaIdeia: ideia.titulo,
+            descricaoDaIdeia: ideia.descricao,
+            corDocartao: ideia.cor,
+            estadoModalEditarIdeia: true,
+            i: index
+        })
+    }
+
+    salvarIdeiaEditada(){
+        let ideias = this.state.ideias
+        let i = this.state.i
+        let ideia = ideias[i]
+        ideia.titulo = this.state.tituloDaIdeia
+        ideia.descricao = this.state.descricaoDaIdeia
+        ideia.cor = this.state.corDocartao
+        ideias[i] = ideia
+
+        window.localStorage.setItem("app_ideas_board",JSON.stringify(ideias))
+        this.carregaIdeiasDoLocalStorage()
+
+        this.setState({
+            ...this,
+            tituloDaIdeia: '',
+            descricaoDaIdeia: '',
+            corDocartao: '',
+            estadoModalEditarIdeia: false,
+            i: 0
+        })
+
     }
 
 
@@ -109,6 +154,7 @@ export default class App extends React.Component {
             <Row>
                 <CardIdeia
                     ideias={this.state.ideias}
+                    editar={this.abrirModalEditarIdeia.bind(this)}
                     remover={this.removerIdeia.bind(this)}
                 />
             </Row>
@@ -237,6 +283,11 @@ export default class App extends React.Component {
                 <ModalFooter>
                     <Button
                         onClick={this.salvaIdeia.bind(this)}
+                        disabled={
+                            this.state.tituloDaIdeia.length < 4
+                            ||
+                            this.state.descricaoDaIdeia.length < 5
+                         }
                         color="success">
                         Salvar
                     </Button>
@@ -250,6 +301,59 @@ export default class App extends React.Component {
                             Cancelar
                     </Button>
                 </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={this.state.estadoModalEditarIdeia}>
+                <ModalHeader>
+                <Input
+                        placeholder="Descrição"
+                        value={this.state.tituloDaIdeia}
+                        onChange={ evt =>{
+                            this.setState({
+                                ...this,
+                                tituloDaIdeia: evt.target.value
+                            })
+                        } }
+                    />
+                </ModalHeader>
+                <ModalBody>
+                <Input
+                        placeholder="Descrição"
+                        value={this.state.descricaoDaIdeia}
+                        onChange={ evt =>{
+                            this.setState({
+                                ...this,
+                                descricaoDaIdeia: evt.target.value
+                            })
+                        } }
+                    />
+                </ModalBody>
+                <ModalFooter>
+                <Button
+                        onClick={this.salvarIdeiaEditada }
+                        disabled={
+                            this.state.tituloDaIdeia.length < 4
+                            ||
+                            this.state.descricaoDaIdeia.length < 5
+                         }
+                        color="success">
+                        Salvar
+                    </Button>
+                    <Button
+                        onClick={() =>{
+                            this.setState({
+                                tituloDaIdeia: '',
+                                descricaoDaIdeia: '',
+                                corDocartao: '',
+                                estadoModalEditarIdeia: false,
+                                i: 0
+                            })
+                        }}
+                        color="danger">
+                            Cancelar
+                    </Button>
+                </ModalFooter>
+
             </Modal>
         </Container>
     }
