@@ -66,14 +66,14 @@ $colors: map-merge(
   $colors
 );
 
-$primary:       $blue !default;
-$secondary:     $gray-600 !default;
-$success:       $green !default;
-$info:          $cyan !default;
-$warning:       $yellow !default;
-$danger:        $red !default;
-$light:         $gray-100 !default;
-$dark:          $gray-800 !default;
+$primary:       #192a56 !default;
+$secondary:     #273c75 !default;
+$success:       #44bd32 !default;
+$info:          #0097e6 !default;
+$warning:       #e1b12c !default;
+$danger:        #c23616 !default;
+$light:         #dcdde1 !default;
+$dark:          #2f3640 !default;
 
 $theme-colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
