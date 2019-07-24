@@ -16,13 +16,15 @@ export default class App extends React.Component {
 
     componentDidMount(){
         const ideias = this.carregaIdeiasDoLocalStorage()
+
         this.setState({
+            ...this,
             ideias: ideias
         })
+        console.log(this.state.ideias)
     }
 
     salvaIdeia(){
-
 
         let ideias = this.carregaIdeiasDoLocalStorage()
 
@@ -37,7 +39,7 @@ export default class App extends React.Component {
         let ideias = this.carregaIdeiasDoLocalStorage()
         let titulo = this.state.tituloDaIdeia
         let descricao = this.state.descricaoDaIdeia
-        
+
         ideias.push({
             "titulo": titulo,
             "descricao": descricao,
