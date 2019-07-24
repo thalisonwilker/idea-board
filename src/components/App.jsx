@@ -7,10 +7,34 @@ export default class App extends React.Component {
         super(props)
 
         this.state = {
+            ideias: [],
             estadoModalAdicionarIdeia : false,
             tituloDaIdeia: '',
             descricaoDaIdeia: ''
         }
+    }
+
+    componentDidMount(){
+        const ideias = this.carregaIdeiasDoLocalStorage()
+        this.setState({
+            ideias: ideias
+        })
+    }
+
+    salvaIdeia(){
+        
+
+    }
+
+    carregaIdeiasDoLocalStorage(){
+        let ideias = window.localStorage.getItem('app_ideas_board')
+
+        if(!ideias){
+            ideias = []
+        }else{
+            ideias = JSON.parse(ideias)
+        }
+        return ideias;
     }
 
     alternaEstadoModalAdicionarTarefa(){
@@ -65,7 +89,9 @@ export default class App extends React.Component {
                     />
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="success">
+                    <Button
+                        onClick={this.salvaIdeia.bind(this)}
+                        color="success">
                         Salvar
                     </Button>
                     <Button
