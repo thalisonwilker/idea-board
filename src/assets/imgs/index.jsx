@@ -1,0 +1,1 @@
+import './logo_react.png'
