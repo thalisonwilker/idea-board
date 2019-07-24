@@ -45,16 +45,27 @@ export default class App extends React.Component {
                     </h3>
                     <hr/>
                     <Input
+                        placeholder="Título"
+                        value={this.state.tituloDaIdeia}
+                        onChange={ evt =>{
+                            this.setState({
+                                tituloDaIdeia: evt.target.value
+                            })
+                        } }
+                    />
+                    <div className="my-2"></div>
+                    <Input
+                        placeholder="Descrição"
                         value={this.state.descricaoDaIdeia}
                         onChange={ evt =>{
                             this.setState({
-                                
+                                descricaoDaIdeia: evt.target.value
                             })
                         } }
                     />
                 </ModalBody>
                 <ModalFooter>
-                    <Button>
+                    <Button color="success">
                         Salvar
                     </Button>
                     <Button
