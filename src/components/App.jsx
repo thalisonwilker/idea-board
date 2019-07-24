@@ -1,6 +1,8 @@
 import React from 'react'
 import { Button, Container, Row, Col, Modal,ModalBody, ModalFooter, Input } from 'reactstrap'
 
+import CardIdeia from './Ideas/Card'
+
 export default class App extends React.Component {
 
     constructor(props){
@@ -15,13 +17,8 @@ export default class App extends React.Component {
     }
 
     componentDidMount(){
-        const ideias = this.carregaIdeiasDoLocalStorage()
-
-        this.setState({
-            ...this,
-            ideias: ideias
-        })
-        console.log(this.state.ideias)
+        let ideias = this.carregaIdeiasDoLocalStorage()
+        
     }
 
     salvaIdeia(){
@@ -36,7 +33,7 @@ export default class App extends React.Component {
     }
 
     salvarIdeiasNoLocalStorage(){
-        let ideias = this.carregaIdeiasDoLocalStorage()
+        let ideias = this.state.ideias
         let titulo = this.state.tituloDaIdeia
         let descricao = this.state.descricaoDaIdeia
 
@@ -46,6 +43,8 @@ export default class App extends React.Component {
         })
 
         window.localStorage.setItem("app_ideas_board",JSON.stringify(ideias))
+        this.carregaIdeiasDoLocalStorage()
+        this.alternaEstadoModalAdicionarTarefa()
     }
 
     carregaIdeiasDoLocalStorage(){
@@ -56,7 +55,10 @@ export default class App extends React.Component {
         }else{
             ideias = JSON.parse(ideias)
         }
-        return ideias;
+        this.setState({
+            ...this,
+            ideias: ideias
+        })
     }
 
     alternaEstadoModalAdicionarTarefa(){
@@ -74,8 +76,8 @@ export default class App extends React.Component {
                         Idea Board
                     </h1>
                 </Col>
-                
             </Row>
+                
             <Row>
                 <Col col={12}>
                     <Button onClick={this.alternaEstadoModalAdicionarTarefa.bind(this)} color="primary">
@@ -83,6 +85,13 @@ export default class App extends React.Component {
                     </Button>
                 </Col>
             </Row>
+
+
+            <Row>
+                <CardIdeia ideias={this.state.ideias} />
+            </Row>
+
+                
 
             <Modal isOpen={this.state.estadoModalAdicionarIdeia}>
                 <ModalBody>
@@ -95,6 +104,7 @@ export default class App extends React.Component {
                         value={this.state.tituloDaIdeia}
                         onChange={ evt =>{
                             this.setState({
+                                ...this,
                                 tituloDaIdeia: evt.target.value
                             })
                         } }
@@ -105,6 +115,7 @@ export default class App extends React.Component {
                         value={this.state.descricaoDaIdeia}
                         onChange={ evt =>{
                             this.setState({
+                                ...this,
                                 descricaoDaIdeia: evt.target.value
                             })
                         } }
