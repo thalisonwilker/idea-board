@@ -22,8 +22,28 @@ export default class App extends React.Component {
     }
 
     salvaIdeia(){
+
+
+        let ideias = this.carregaIdeiasDoLocalStorage()
+
+        console.log(ideias)
+
+        this.salvarIdeiasNoLocalStorage()
         
 
+    }
+
+    salvarIdeiasNoLocalStorage(){
+        let ideias = this.carregaIdeiasDoLocalStorage()
+        let titulo = this.state.tituloDaIdeia
+        let descricao = this.state.descricaoDaIdeia
+        
+        ideias.push({
+            "titulo": titulo,
+            "descricao": descricao,
+        })
+
+        window.localStorage.setItem("app_ideas_board",JSON.stringify(ideias))
     }
 
     carregaIdeiasDoLocalStorage(){
